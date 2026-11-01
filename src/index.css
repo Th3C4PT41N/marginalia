@@ -1,0 +1,325 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------
+   Marginalia — design tokens
+   A warm archival paper palette, ink-dark instrument bar, vermilion
+   accent used sparingly for annotation marks.
+------------------------------------------------------------------- */
+:root {
+  --paper: 238 232 221; /* #EEE8DD */
+  --sheet: 251 248 242; /* #FBF8F2 */
+  --sheet-2: 246 241 231;
+  --ink: 24 21 17; /* #181511 */
+  --ink-2: 77 70 60;
+  --ink-3: 124 115 103;
+  --accent: 173 56 41; /* #AD3829 */
+  --teal: 42 104 92;
+  --gold: 163 124 55;
+  --bar: 23 20 16;
+  --line: 24 21 17;
+
+  --serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+  --sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: rgb(var(--paper));
+    color: rgb(var(--ink));
+    font-family: var(--sans);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow: hidden;
+  }
+
+  ::selection {
+    background: rgb(var(--accent) / 0.18);
+    color: rgb(var(--ink));
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent) / 0.55);
+    outline-offset: 2px;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Thin, quiet scrollbars */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--ink) / 0.22) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: rgb(var(--ink) / 0.16);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 999px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--ink) / 0.3);
+    background-clip: content-box;
+  }
+}
+
+@layer components {
+  /* Paper grain: one fixed, non-interactive overlay for the whole app */
+  .grain::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.32;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+  }
+
+  .pane {
+    @apply relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-xl bg-sheet shadow-pane;
+  }
+
+  .pane-head {
+    @apply flex h-12 shrink-0 items-center justify-between gap-2 border-b border-line/[0.07] px-3;
+  }
+
+  .micro {
+    @apply font-mono text-[10px] font-medium uppercase leading-none tracking-[0.16em] text-ink-3;
+  }
+
+  .btn {
+    @apply inline-flex h-8 shrink-0 select-none items-center justify-center gap-1.5 rounded-md px-2.5 text-[12px] font-medium leading-none transition-[background-color,color,box-shadow,opacity] duration-150 ease-out active:scale-[0.98] disabled:pointer-events-none disabled:opacity-40;
+  }
+  .btn-quiet {
+    @apply btn text-ink-2 hover:bg-ink/[0.055] hover:text-ink;
+  }
+  .btn-outline {
+    @apply btn bg-sheet text-ink-2 shadow-[inset_0_0_0_1px_rgb(24_21_17_/_0.13)] hover:bg-sheet-2 hover:text-ink;
+  }
+  .btn-solid {
+    @apply btn bg-ink text-sheet hover:bg-ink/90;
+  }
+  .btn-accent {
+    @apply btn bg-accent text-white hover:bg-accent/90;
+  }
+  .btn-icon {
+    @apply inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-ink-3 transition-[background-color,color] duration-150 ease-out hover:bg-ink/[0.06] hover:text-ink active:scale-95 disabled:pointer-events-none disabled:opacity-35;
+  }
+
+  .field {
+    @apply w-full rounded-md border-0 bg-sheet px-2.5 py-1.5 text-[12.5px] text-ink shadow-[inset_0_0_0_1px_rgb(24_21_17_/_0.14)] outline-none transition-shadow duration-150 placeholder:text-ink-3/70 focus:shadow-[inset_0_0_0_1.5px_rgb(173_56_41_/_0.55)];
+  }
+
+  .chip {
+    @apply inline-flex h-5 items-center gap-1 rounded-[4px] bg-ink/[0.055] px-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.06em] text-ink-2;
+  }
+
+  .kbd {
+    @apply inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-[4px] bg-ink/[0.07] px-1 font-mono text-[9.5px] font-medium text-ink-3;
+  }
+
+  /* ---------------- Draft editor ---------------- */
+  .draft-scroll {
+    @apply min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pb-24 pt-6 sm:px-8;
+    background-image: radial-gradient(rgb(var(--ink) / 0.045) 0.5px, transparent 0.5px);
+    background-size: 22px 22px;
+  }
+
+  .draft-sheet {
+    @apply relative mx-auto w-full max-w-[46rem] rounded-[3px] bg-sheet px-8 py-12 shadow-page sm:px-14 sm:py-16;
+  }
+
+  .draft-prose {
+    @apply font-serif text-[17.5px] leading-[1.78] text-ink/90 outline-none;
+    font-feature-settings: 'liga' 1, 'kern' 1;
+    caret-color: rgb(var(--accent));
+  }
+  .draft-prose:empty::before {
+    content: 'Begin writing, or load an HTML draft…';
+    color: rgb(var(--ink) / 0.28);
+  }
+  .draft-prose > * + * {
+    margin-top: 0.85em;
+  }
+  .draft-prose h1 {
+    @apply font-serif text-[30px] font-normal leading-[1.15] tracking-[-0.015em] text-ink;
+    margin-bottom: 0.15em;
+  }
+  .draft-prose h2 {
+    @apply mt-8 font-serif text-[20px] font-medium leading-snug tracking-[-0.005em] text-ink;
+  }
+  .draft-prose h3 {
+    @apply mt-6 font-sans text-[12px] font-semibold uppercase tracking-[0.14em] text-ink-2;
+  }
+  .draft-prose p {
+    @apply text-pretty;
+  }
+  .draft-prose strong {
+    @apply font-semibold text-ink;
+  }
+  .draft-prose em {
+    @apply italic;
+  }
+  .draft-prose a {
+    @apply text-accent underline decoration-accent/30 underline-offset-2;
+  }
+  .draft-prose blockquote {
+    @apply my-6 border-l-2 border-accent/40 pl-5 text-[16.5px] italic text-ink-2;
+  }
+  .draft-prose ul,
+  .draft-prose ol {
+    @apply my-4 pl-5;
+  }
+  .draft-prose ul {
+    list-style: disc;
+  }
+  .draft-prose ol {
+    list-style: decimal;
+  }
+  .draft-prose li {
+    @apply my-1 pl-1;
+  }
+  .draft-prose li::marker {
+    color: rgb(var(--accent) / 0.6);
+  }
+  .draft-prose hr {
+    @apply my-8 border-0 text-center;
+  }
+  .draft-prose hr::after {
+    content: '❦';
+    color: rgb(var(--ink) / 0.35);
+    font-size: 18px;
+  }
+  .draft-prose .chapter-kicker {
+    @apply mb-3 block font-mono text-[10px] uppercase tracking-[0.2em] text-accent;
+  }
+  .draft-prose .dropcap::first-letter {
+    @apply float-left mr-2 mt-1 font-serif text-[54px] leading-[0.78] text-ink;
+  }
+
+  /* ---------------- PDF reader ---------------- */
+  .pdf-stage {
+    @apply relative flex min-h-0 flex-1 justify-center overflow-auto p-4;
+    background-color: rgb(var(--sheet-2));
+    background-image: radial-gradient(rgb(var(--ink) / 0.05) 0.5px, transparent 0.5px);
+    background-size: 20px 20px;
+  }
+
+  .pdf-page {
+    @apply relative shrink-0 bg-white shadow-page;
+  }
+
+  .textLayer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    line-height: 1;
+    opacity: 1;
+    text-size-adjust: none;
+    forced-color-adjust: none;
+    transform-origin: 0 0;
+  }
+  .textLayer span,
+  .textLayer br {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    color: transparent;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0% 0%;
+  }
+  .textLayer span::selection {
+    background: rgb(173 56 41 / 0.22);
+  }
+  .textLayer .is-hit {
+    background: rgb(173 56 41 / 0.1);
+    border-radius: 2px;
+  }
+
+  /* ---------------- Citation / bibliography ---------------- */
+  .bib-list {
+    @apply space-y-3 font-serif text-[14px] leading-[1.7];
+  }
+  .bib-list p {
+    padding-left: 2em;
+    text-indent: -2em;
+  }
+
+  .locker-card {
+    @apply relative flex h-full w-[310px] shrink-0 snap-start flex-col rounded-lg bg-sheet shadow-[0_0_0_1px_rgb(24_21_17_/_0.08),0_6px_18px_-12px_rgb(24_21_17_/_0.4)];
+  }
+
+  .divider-orn {
+    @apply flex items-center gap-3 text-ink-3/60;
+  }
+  .divider-orn::before,
+  .divider-orn::after {
+    content: '';
+    @apply h-px flex-1 bg-line/10;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .drag-none {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+}
+
+/* Reduced motion: strip decorative movement everywhere. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
